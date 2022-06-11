@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +12,6 @@ class TaskItems extends Model
 
     protected $fillable = [
         'start',
-        'status',
     ];
 
     protected $casts = [
@@ -44,5 +44,16 @@ class TaskItems extends Model
             'times' => $this->task->times,
             'timespent' => $this->task->timespent,
         ];
+    }
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d');
     }
 }
