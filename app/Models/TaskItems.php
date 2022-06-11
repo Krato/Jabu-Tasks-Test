@@ -27,4 +27,22 @@ class TaskItems extends Model
     {
         return $this->belongsTo(Task::class);
     }
+
+    /**
+     * Get given task item formatted
+     */
+    public function formatted()
+    {
+        $this->loadMissing('task');
+
+        return [
+            'id' => $this->task->id,
+            'user_id' => $this->task->user_id,
+            'title' => $this->task->title,
+            'start' => $this->start,
+            'status' => $this->task->status,
+            'times' => $this->task->times,
+            'timespent' => $this->task->timespent,
+        ];
+    }
 }

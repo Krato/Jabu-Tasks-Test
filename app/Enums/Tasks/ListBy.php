@@ -9,6 +9,11 @@ enum ListBy
     case NEXT_WEEK;
     case NEXT_MONTH;
 
+    public function getName()
+    {
+        return strtolower($this->name);
+    }
+
     /**
      * Get dates for given task
      *
