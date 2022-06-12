@@ -34,10 +34,12 @@
                                             <p class="text-sm text-gray-800 truncate">{{ $item['start'] }}</p>
                                         </div>
 
-                                        <div class="">
-                                            <p class="text-sm text-gray-500 truncate">MAXTIMES: {{ $item['times'] }}</p>
-                                            <p class="text-sm text-gray-500 truncate">HAPPENED: {{ $item['timespent'] }}</p>
-                                        </div>
+                                        @if($item['times'] > 0)
+                                            <div class="">
+                                                <p class="text-sm text-gray-500 truncate">MAXTIMES: {{ $item['times'] }}</p>
+                                                <p class="text-sm text-gray-500 truncate">HAPPENED: {{ $item['timespent'] }}</p>
+                                            </div>
+                                        @endif
                                     </a>
                                 </div>
                             </div>

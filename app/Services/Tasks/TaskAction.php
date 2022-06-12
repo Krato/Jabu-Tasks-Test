@@ -48,6 +48,9 @@ class TaskAction
         $task->status = Status::COMPLETED;
         $task->completed_at = now();
 
+        $task->loadMissing('items');
+        $task->items()->update(['status' => Status::COMPLETED]);
+
         return $task->save();
     }
 

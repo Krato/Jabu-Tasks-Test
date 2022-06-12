@@ -21,11 +21,11 @@ class TaskCreate
      * @param DateTime $endDate
      * @param string $title
      * @param \App\Services\Tasks\TaskFrequency $taskFrequency
-     * @param int $maxIterates
+     * @param int $times
      *
      * @return \App\Models\Task
      */
-    public function create(User $user, DateTime $startDate, DateTime $endDate, string $title, TaskFrequency $taskFrequency, $times = 0, $maxIterations = 732): Task
+    public function create(User $user, DateTime $startDate, DateTime $endDate, string $title, TaskFrequency $taskFrequency, $times = 0): Task
     {
         $rule = $this->getRule($startDate, $endDate, $taskFrequency);
         $dates = $this->getRuleDates($rule, $times);

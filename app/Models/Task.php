@@ -37,6 +37,9 @@ class Task extends Model
     ];
 
 
+    protected $with = ['items'];
+
+
     /**
      * Get items for the task.
      */
