@@ -42,6 +42,7 @@ class TaskCreate
             ->createMany(collect($dates)->map(function ($date) {
                 return [
                     'start' => $date->getStart()->format('Y-m-d'),
+                    'status' => Status::PENDING,
                 ];
             })->toArray());
 

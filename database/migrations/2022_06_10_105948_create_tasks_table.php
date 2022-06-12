@@ -20,7 +20,8 @@ return new class extends Migration {
             $table->string('title');
             $table->integer('times')->unsigned()->default(0);
             $table->integer('timespent')->unsigned()->default(0);
-            $table->integer('status')->unsigned()->default(0); //Maybe also enum type
+            $table->integer('status')->unsigned()->default(0);
+            $table->dateTime('completed_at')->nullable();
             $table->timestamps();
         });
     }

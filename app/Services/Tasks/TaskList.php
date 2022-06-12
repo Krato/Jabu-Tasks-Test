@@ -17,19 +17,21 @@ class TaskList
      *
      * @param \App\Models\User $user
      * @param \App\Enums\Tasks\ListBy|null $listBy
+     * @param \App\Enums\Tasks\Status|null $status
      *
-     * @return void
+     * @return array
      */
-    public function getTasks(User $user, ?ListBy $listBy = null)
+    public function getTasks(User $user, ?ListBy $listBy = null, ?Status $status = null): array
     {
         $filterBy = $listBy != null ? [$listBy] : ListBy::cases();
+        $filterStatus =  $status != null ? [$status] : Status::cases();
 
         // Get pending items tasks
-        $items = $this->getTasksItems($user, $filterBy);
+        $items = $this->getTasksItems($user, $filterBy, $filterStatus);
 
         // Format founded tasks
         $formatted = $items->map(function ($item) {
-            return (object) $item->formatted();
+            return $item->toArray();
         });
 
         return $this->groupByFilters($formatted, $filterBy);
@@ -43,11 +45,11 @@ class TaskList
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    private function getTasksItems(User $user, array $filterBy): Collection
+    private function getTasksItems(User $user, array $filterBy, array $filterStatus): Collection
     {
-        return TaskItems::whereHas('task', function ($query) use ($user) {
+        return TaskItems::whereHas('task', function ($query) use ($user, $filterStatus) {
             $query->where('user_id', $user->id)
-                ->whereStatus(Status::PENDING);
+                ->whereIn('status', $filterStatus);
         })->where(function ($q) use ($filterBy) {
             foreach ($filterBy as $filter) {
                 $q->orWhereBetween('start', $filter->getDates());
@@ -72,13 +74,15 @@ class TaskList
         foreach ($filterBy as $filter) {
             $list[$filter->getName()] = $items->filter(function ($item) use ($filter) {
                 if (in_array($filter->getName(), ['today', 'tomorrow'])) {
-                    return $item->start->format('Y-m-d') == $filter->getDates()['start'];
+                    return $item['start'] == $filter->getDates()['start'];
                 }
 
-                return $item->start >= $filter->getDates()['start'] && $item->start <= $filter->getDates()['end'];
+                return $item['start'] >= $filter->getDates()['start'] && $item['start'] <= $filter->getDates()['end'];
             });
         }
 
-        return $list;
+        return collect($list)->filter(function ($item) {
+            return $item->count() > 0;
+        })->toArray();
     }
 }

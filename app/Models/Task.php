@@ -19,6 +19,7 @@ class Task extends Model
         'times',
         'timespent',
         'status',
+        'completed_at'
     ];
 
 
@@ -30,6 +31,7 @@ class Task extends Model
     protected $casts = [
         'start' => 'datetime:Y-m-d',
         'finish' => 'datetime:Y-m-d',
+        'completed_at' => 'datetime:Y-m-d H:i:s',
         'status'=> Status::class
     ];
 

@@ -2,8 +2,12 @@
 
 namespace App\Enums\Tasks;
 
+use App\Enums\Traits\NamesTrait;
+
 enum Frequency: int
 {
+    use NamesTrait;
+
     case YEARLY = 0;
     case MONTHLY = 1;
     case WEEKLY = 2;

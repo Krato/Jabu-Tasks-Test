@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Tasks\Status;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,10 +13,14 @@ class TaskItems extends Model
 
     protected $fillable = [
         'start',
+        'status',
+        'completed_at',
     ];
 
     protected $casts = [
         'start' => 'datetime:Y-m-d',
+        'completed_at' => 'datetime:Y-m-d H:i:s',
+        'status'=> Status::class
     ];
 
     /**
@@ -40,7 +45,7 @@ class TaskItems extends Model
             'user_id' => $this->task->user_id,
             'title' => $this->task->title,
             'start' => $this->start,
-            'status' => $this->task->status,
+            'status' => $this->task->status->name,
             'times' => $this->task->times,
             'timespent' => $this->task->timespent,
         ];
@@ -55,5 +60,26 @@ class TaskItems extends Model
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d');
+    }
+
+    /**
+     * Convert the model instance to an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'task_id' => $this->task_id,
+            'user_id' => $this->task->user_id,
+            'title' => $this->task->title,
+            'start' => $this->start->format('Y-m-d'),
+            'status' => $this->status->name,
+            'task_status' => $this->task->status->name,
+            'times' => $this->task->times,
+            'timespent' => $this->task->timespent,
+        ];
+        return array_merge($this->attributesToArray(), $this->relationsToArray());
     }
 }

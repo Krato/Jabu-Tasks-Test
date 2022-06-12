@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('task_id')->constrained('tasks')->cascadeOnDelete();
             $table->date('start');
+            $table->integer('status')->unsigned()->default(0);
+            $table->dateTime('completed_at')->nullable();
             $table->timestamps();
         });
     }

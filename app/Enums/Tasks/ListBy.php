@@ -2,8 +2,12 @@
 
 namespace App\Enums\Tasks;
 
+use App\Enums\Traits\NamesTrait;
+
 enum ListBy
 {
+    use NamesTrait;
+
     case TODAY;
     case TOMORROW;
     case NEXT_WEEK;
