@@ -2,6 +2,8 @@
 
 namespace App\Enums\Traits;
 
+use InvalidArgumentException;
+
 trait NamesTrait
 {
     /**
@@ -20,5 +22,23 @@ trait NamesTrait
         }
 
         return $names;
+    }
+
+    /**
+     * Get the enum by name
+     *
+     * @return self
+     */
+    public static function getByName(string $name): self
+    {
+        $cases = self::cases();
+
+        foreach ($cases as $case) {
+            if ($case->name === $name) {
+                return $case;
+            }
+        }
+
+        throw new \InvalidArgumentException('Invalid name');
     }
 }

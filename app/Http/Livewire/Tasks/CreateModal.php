@@ -3,11 +3,17 @@
 namespace App\Http\Livewire\Tasks;
 
 use App\Enums\Tasks\Frequency;
+use App\Http\Livewire\Tasks\Index;
 use App\Services\Tasks\TaskCreate;
+use App\Services\Tasks\TaskFrequency;
+use DateTime;
 use LivewireUI\Modal\ModalComponent;
+use WireUi\Traits\Actions;
 
 class CreateModal extends ModalComponent
 {
+    use Actions;
+
     public $task = [
         'title' => '',
         'start' => '',
@@ -58,10 +64,6 @@ class CreateModal extends ModalComponent
             'frequency.value' => 'required|string|in:'.implode(',', Frequency::names()),
         ];
 
-        if ($this->frequency['value'] === 'DAILY') {
-            $rules['frequency.days'] = 'required|array|min:1';
-        }
-
         if ($this->frequency['value'] === 'WEEKLY') {
             $rules['frequency.weekdays'] = 'required|array|min:1';
         }
@@ -84,10 +86,6 @@ class CreateModal extends ModalComponent
         return view('livewire.tasks.create-modal');
     }
 
-    public static function modalMaxWidth(): string
-    {
-        return '3xl';
-    }
 
     public function setFrequency($value)
     {
@@ -98,12 +96,41 @@ class CreateModal extends ModalComponent
     {
         $this->validate();
 
-        dd('àsa');
+        $frequency = Frequency::getByName($this->frequency['value']);
+
+        $taskFrequency = new TaskFrequency(
+            frequency: $frequency,
+            weekDays:$this->frequency['weekdays'],
+            months: is_array($this->frequency['months']) ? $this->frequency['months'] : [$this->frequency['months']],
+            monthDays: is_array($this->frequency['days']) ? $this->frequency['days'] : [$this->frequency['days']],
+        );
+
+        (new TaskCreate)->create(
+            user: auth()->user(),
+            startDate: new DateTime($this->task['start']),
+            endDate: new DateTime($this->task['finish']),
+            title: $this->task['title'],
+            taskFrequency: $taskFrequency,
+            times: $this->task['times'],
+        );
+
+        $this->notification()->success(
+            'Task created',
+            'The task hass been created successfully'
+        );
+
+        $this->closeModalWithEvents([
+            Index::getName() => 'getTasks',
+        ]);
     }
 
-
-    public function getTaskCreateResolver(): TaskCreate
+    public static function modalMaxWidth(): string
     {
-        return resolve(TaskCreate::class);
+        return '3xl';
+    }
+
+    public static function closeModalOnClickAway(): bool
+    {
+        return false;
     }
 }

@@ -77,8 +77,12 @@ class TaskAction
     {
         $item->status = Status::COMPLETED;
         $item->completed_at = now();
+        $item->save();
 
-        return $item->save();
+        // Check if all items are completed
+        $this->checkAllItemsCompleted($item->refresh());
+
+        return true;
     }
 
     /**
@@ -94,5 +98,21 @@ class TaskAction
         $item->completed_at = null;
 
         return $item->save();
+    }
+
+    /**
+     * Check if all items are completed
+     *
+     * @param \App\Models\TaskItems $item
+     *
+     * @return void
+     */
+    private function checkAllItemsCompleted(TaskItems $taskItem)
+    {
+        $task = $taskItem->task;
+
+        if ($task->items()->whereStatus(Status::PENDING)->count() === 0) {
+            $this->complete($task);
+        }
     }
 }

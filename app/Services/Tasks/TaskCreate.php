@@ -28,7 +28,7 @@ class TaskCreate
     public function create(User $user, DateTime $startDate, DateTime $endDate, string $title, TaskFrequency $taskFrequency, $times = 0, $maxIterations = 732): Task
     {
         $rule = $this->getRule($startDate, $endDate, $taskFrequency);
-        $dates = $this->getRuleDates($rule, $maxIterations);
+        $dates = $this->getRuleDates($rule, $times);
 
         $task = $user->tasks()->create([
             'start' => $startDate,
@@ -90,11 +90,13 @@ class TaskCreate
      *
      * @return array
      */
-    private function getRuleDates(Rule $rule, $maxIterates = 0): array
+    private function getRuleDates(Rule $rule, $maxIterates = 732): array
     {
         $transformerConfig = new ArrayTransformerConfig();
         $transformerConfig->enableLastDayOfMonthFix();
-        $transformerConfig->setVirtualLimit($maxIterates);
+        if ($maxIterates > 0) {
+            $transformerConfig->setVirtualLimit($maxIterates);
+        }
 
         $transformer = new ArrayTransformer();
         $transformer->setConfig($transformerConfig);

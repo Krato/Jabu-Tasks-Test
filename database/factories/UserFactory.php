@@ -24,7 +24,6 @@ class UserFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (User $user) {
-
             $tasksNumber = $this->faker->numberBetween(30, 100);
 
             for ($i = 0; $i < $tasksNumber; $i++) {

@@ -34,7 +34,7 @@ class TaskFrequency
      * @param array $months
      * @param array $monthDays
      */
-    public function __construct(Frequency $frequency, $weekDays = [], $months = [], $monthDays = [])
+    public function __construct(Frequency $frequency, array $weekDays = [], array $months = [], array $monthDays = [])
     {
         $this->frequency = $frequency->value;
         $this->weekDays = $weekDays;

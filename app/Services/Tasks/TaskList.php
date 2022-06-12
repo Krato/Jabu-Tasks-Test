@@ -26,6 +26,7 @@ class TaskList
         $filterBy = $listBy != null ? [$listBy] : ListBy::cases();
         $filterStatus =  $status != null ? [$status] : Status::cases();
 
+
         // Get pending items tasks
         $items = $this->getTasksItems($user, $filterBy, $filterStatus);
 

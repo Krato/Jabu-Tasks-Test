@@ -4,8 +4,8 @@
 
         @foreach($tasks as $type => $items)
             <div class="relative">
-                <div class="sticky top-0 z-10 px-6 py-4 text-sm font-medium text-gray-500 border-t border-b border-gray-200 bg-gray-50">
-                    <h3>{{ $type }}</h3>
+                <div class="sticky top-0 z-10 px-6 py-4 text-sm font-medium text-gray-500 uppercase border-t border-b border-gray-200 bg-gray-50">
+                    <h3>{{ fixName($type) }}</h3>
                 </div>
                 <ul role="list" class="relative z-0 divide-y divide-gray-200">
                     @foreach($items as $item)
@@ -27,15 +27,22 @@
                                     @endif
                                 </div>
                                 <div class="flex-1 min-w-0">
-                                    <a href="#" class="focus:outline-none" wire:click="setAsCompleted({{ $item['id'] }})">
+                                    <a href="#" class="flex justify-between focus:outline-none" wire:click="setAsCompleted({{ $item['id'] }})">
                                         <span class="absolute inset-0" aria-hidden="true"></span>
-                                        <p class="text-sm font-medium text-gray-900">{{ $item['title'] }}</p>
-                                        <p class="text-sm text-gray-500 truncate">DATE: {{ $item['start'] }}</p>
-                                        <p class="text-sm text-gray-500 truncate">MAXTIMES: {{ $item['times'] }}</p>
-                                        <p class="text-sm text-gray-500 truncate">TIMES: {{ $item['timespent'] }}</p>
+                                        <div class="">
+                                            <p class="text-sm font-medium text-gray-900">{{ $item['title'] }}</p>
+                                            <p class="text-sm text-gray-800 truncate">{{ $item['start'] }}</p>
+                                        </div>
+
+                                        <div class="">
+                                            <p class="text-sm text-gray-500 truncate">MAXTIMES: {{ $item['times'] }}</p>
+                                            <p class="text-sm text-gray-500 truncate">HAPPENED: {{ $item['timespent'] }}</p>
+                                        </div>
                                     </a>
                                 </div>
                             </div>
+
+
                     </li>
                     @endforeach
                 </ul>
