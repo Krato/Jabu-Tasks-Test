@@ -6,10 +6,11 @@ use App\Enums\Tasks\Status;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Prunable;
 
 class Task extends Model
 {
-    use HasFactory;
+    use HasFactory, Prunable;
 
 
     protected $fillable = [
@@ -45,13 +46,12 @@ class Task extends Model
     }
 
     /**
-     * Prepare a date for array / JSON serialization.
-     *
-     * @param  \DateTimeInterface  $date
-     * @return string
-     */
-    protected function serializeDate(DateTimeInterface $date)
+    * Get the prunable model query.
+    *
+    * @return \Illuminate\Database\Eloquent\Builder
+    */
+    public function prunable()
     {
-        return $date->format('Y-m-d');
+        return static::where('created_at', '<=', now()->subMonth());
     }
 }

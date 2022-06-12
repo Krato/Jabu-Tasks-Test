@@ -17,6 +17,10 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('tasks:process-tasks-counts')
             ->dailyAt('00:10');
+
+        // Prune all tasks older than a month
+        $schedule->command('model:prune')
+            ->daily();
     }
 
     /**
