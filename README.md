@@ -49,7 +49,7 @@ List of all task services
 **TaskFrequency**: Create Task Frequency class
 
 > Arguments:
-> * Frequency: Frequency ENUM (DAILY,WEEKLY,MONTHLY,YEARLY)
+> * Frequency: Frequency ENUM (DAILY, WEEKLY, MONTHLY, YEARLY)
 > * WeekDays: array (['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'])
 > * Months: array ([1,2,3,4,5,6,7,8,9,10,11,12])
 > * MonthDays: array ([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
