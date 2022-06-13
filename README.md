@@ -123,3 +123,10 @@ $frequency =  new TaskFrequency(Frequency::DAILY);
 (new TaskCreate)->create($user, $start, $finish, 'Max 3 task items', $frequency, 3);
 ```
 
+## Tests
+
+There are some tests included. To run them execute the following command:
+
+```bash
+./vendor/bin/pest
+```
