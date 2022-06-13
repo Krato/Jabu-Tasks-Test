@@ -1,64 +1,125 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<p align="center"><a href="https://gojbu.com" target="_blank"><img src="https://www.gojabu.com/wp-content/uploads/2021/08/FONDO-AZUL-1.png" width="400px" />
+</a></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+#  Jabu FullStack Test
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Start
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+After installation due sail or local installation execute next command:
 
-## Learning Laravel
+```bash
+php artisan app:start
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+or
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```bash
+sail artisan app:start
+```
 
-## Laravel Sponsors
+This command will create the db, seed the demo data and new user. User login details will be prompt.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Web interface
 
-### Premium Partners
+You will be able to create periodic tasks with the ui.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## Technologies
 
-## Contributing
+* Laravel 9.17.0
+* Livewire (for easy web ui)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## How it works
 
-## Code of Conduct
+Once a task is created, the app will create all associated recurring task dates (called `items`).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+In this way you can manage from 10 tasks to millions of tasks because the system will not suffer obtaining the data because they are already in DB, there are no loops or complitcated queries to perform.
 
-## Security Vulnerabilities
+The task will finish at the end date or at the max number of iterations saved when the task was created.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+An item (sub task) can be completed as well. Once all subtask are completed the task will be mark as completed. You can mark as complete a task instead a item. Then all items will be marked as completed.
 
-## License
+All tasks belongs to a User;
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Services
+
+List of all task services
+
+**TaskFrequency**: Create Task Frequency class
+
+> Arguments:
+> * Frequency: Frequency ENUM (DAILY,WEEKLY,MONTHLY,YEARLY)
+> * WeekDays: array (['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'])
+> * Months: array ([1,2,3,4,5,6,7,8,9,10,11,12])
+> * MonthDays: array ([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31])
+
+
+**TaskCreate**: Create a new task for given arguments. `Return Task model`.
+
+> Arguments:
+> * User: User model instance
+> * StartDate: DateTime instance
+> * EndDate: DateTime instance
+> * Title: string (task title)
+> * TaskFrequency: TaskFrequency instance
+> * Limit: int (max number of iterations)
+> * @return Task model instance
+
+**TaskList**: Get all tasks for a given user. `Return array of formatted Tasks`.
+
+If `ListBy` is not set then the list will get all ListBy cases
+
+If `Status` is not set then the list will get all Status cases
+
+> Arguments:
+> * User: User model instance
+> * ListBy: null, ListBy ENUM (TODAY,TOMORROW,NEXT_WEEK,NEXT_MONTH)
+> * Status: null, Status ENUM (PENDING,COMPLETED)
+
+**TaskAction**: Perform an action on a task or task item
+
+> Methods:
+> * AddCount: Add count to a task item
+> * Complete: Mark a task as completed
+> * CompleteItem: Mark a task item as completed
+> * Pending: Mark a task as pending
+> * PendingItem: Mark a task item as pending
+
+### Creating a task - Some Examples
+
+```php
+//Get a user
+$user = User::first();
+
+// Start date
+$start = new DateTime('2022-07-01');
+
+// Finish date
+$finish = new DateTime('2022-07-15');
+
+// Create a Task frequency daily
+$frequency =  new TaskFrequency(Frequency::DAILY);
+
+// Create the task
+$task = (new TaskCreate)->create($user, $start, $finish, 'June 1 to 15', $frequency);
+
+// Create a week task
+$finish = new DateTime('2022-10-01');
+$frequency =  new TaskFrequency(Frequency::WEEKLY, ['MO', 'TU']);
+(new TaskCreate)->create($user, $start, $finish, 'All Monday and tuesday', $frequency);
+
+// Create a monthly task
+$finish = new DateTime('2024-07-15');
+$frequency =  new TaskFrequency(Frequency::MONTHLY, [],[3, 5], [5, 7]);
+(new TaskCreate)->create($user, $start, $finish, 'All 5 and 7 days of march and may', $frequency);
+
+// All 5 of each month
+$frequency =  new TaskFrequency(Frequency::MONTHLY, [], [], [5]);
+(new TaskCreate)->create($user, $start, $finish, 'All 5 of each month', $frequency);
+
+// All days between the given dates max repeat of 3
+$frequency =  new TaskFrequency(Frequency::DAILY);
+(new TaskCreate)->create($user, $start, $finish, 'Max 3 task items', $frequency, 3);
+```
+
