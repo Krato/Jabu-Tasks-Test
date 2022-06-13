@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Tasks;
 
 use App\Enums\Tasks\Frequency;
+use App\Events\Tasks\TaskCreated;
 use App\Http\Livewire\Tasks\Index;
 use App\Services\Tasks\TaskCreate;
 use App\Services\Tasks\TaskFrequency;
@@ -105,7 +106,7 @@ class CreateModal extends ModalComponent
             monthDays: is_array($this->frequency['days']) ? $this->frequency['days'] : [$this->frequency['days']],
         );
 
-        (new TaskCreate)->create(
+        $task = (new TaskCreate)->create(
             user: auth()->user(),
             startDate: new DateTime($this->task['start']),
             endDate: new DateTime($this->task['finish']),
@@ -113,6 +114,8 @@ class CreateModal extends ModalComponent
             taskFrequency: $taskFrequency,
             times: $this->task['times'],
         );
+
+        event(new TaskCreated($task));
 
         $this->notification()->success(
             'Task created',

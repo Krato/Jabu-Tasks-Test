@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
 
                 for ($i = 0; $i < $tasksNumber; $i++) {
                     $frequency = $this->faker->randomElement(Frequency::cases());
-                    $start = $this->faker->dateTimeBetween('today', '+15 days');
+                    $start = $this->faker->dateTimeBetween('-4 days', '+15 days');
                     $finish = $this->getFinishDate(clone $start, $frequency);
                     $times = $this->faker->numberBetween(0, 10);
 
@@ -49,8 +49,8 @@ class DatabaseSeeder extends Seeder
             })
             ->create([
                 'name' => 'Eric',
-                'email' => 'ericlagarda@gmail.com',
-                'password' => bcrypt('secret'),
+                'email' => 'eric@gojabu.com',
+                'password' => bcrypt('givemeFive'),
             ]);
     }
 }
