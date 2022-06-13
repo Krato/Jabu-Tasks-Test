@@ -3,23 +3,26 @@
 
 
 
-#  Jabu FullStack Test
+# Jabu FullStack Test
 
-## Start
+## Installation
 
-After installation due sail or local installation execute next command:
+**Local installation**
 
 ```bash
+composer install
 php artisan app:start
 ```
 
-or
+**Docker installation**
 
 ```bash
+sail build
+sail up
 sail artisan app:start
 ```
 
-This command will create the db, seed the demo data and new user. User login details will be prompt.
+Command `app:start` will create the db, seed the demo data and new user. User login details will be prompt.
 
 ## Web interface
 
